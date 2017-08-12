@@ -14,6 +14,7 @@ from kivy.graphics import Color, Ellipse, Line
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 
 from ai import DQN # AI using PyTorch
+# from ai_theano import DQN # AI using theano
 # from ai_tf import DQN # AI using TensorFlow
 # from ai_tf_alt import DQN # AI using TensorFlow contrib.layers (more efficient)
 
@@ -166,7 +167,7 @@ class Game(Widget):
 			diff = np.array([dx, dy])
 			last_distance = np.sqrt(diff.dot(diff))
 
-		last_action = brain.select_action(last_signal, temperature=75)
+		last_action = brain.select_action(last_signal, temperature=50)
 		rotation = action2rotation[last_action] # convert the action played (0, 1 or 2) into the rotation angle (0, 20 or -20)
 		self.car.move(rotation) # move the car according to this rotation angle
 
