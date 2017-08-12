@@ -2,6 +2,8 @@
 
 A simple Self-Driving Car
 
+- Highly recommend using IDE (My version: Spyder 3.1.4)
+
 ## Requirements
 - Python 2.7.13
 - NumPy 1.13.1
