@@ -15,6 +15,7 @@ from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProper
 
 from ai import DQN # AI using PyTorch
 # from ai_tf import DQN # AI using TensorFlow
+# from ai_tf_alt import DQN # AI using TensorFlow contrib.layers (more efficient)
 
 
 # Add this line if we don't want the right click to put a red point
