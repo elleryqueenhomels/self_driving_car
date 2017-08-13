@@ -14,8 +14,8 @@ CHECKPOINT_PATH = 'last_brain_theano.npz'
 class HiddenLayer(object):
 
 	def __init__(self, Mi, Mo, activation=T.nnet.relu, use_bias=True):
-		W0 = np.random.randn(Mi, Mo).astype(np.float32)
-		self.W = theano.shared(W0)
+		W0 = np.random.randn(Mi, Mo) / np.sqrt(Mi + Mo)
+		self.W = theano.shared(W0.astype(np.float32))
 		self.use_bias = use_bias
 		self.params = [self.W]
 		if use_bias:
