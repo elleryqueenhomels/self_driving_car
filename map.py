@@ -30,7 +30,7 @@ length = 0 # the length of the last drawing
 n_points = 0 # the total number of points in the last drawing
 
 # Get our AI, which we call 'brain', and that contains our Neural Network that represent our Q-function
-brain = DQN(input_sz=5, output_sz=3, hidden_layer_sizes=[100, 100], gamma=0.9) # 5 inputs (dimensionality), 3 outputs (actions), gamma = 0.9
+brain = DQN(input_sz=5, output_sz=3, hidden_layer_sizes=[60], gamma=0.9) # 5 inputs (dimensionality), 3 outputs (actions), gamma = 0.9
 temperature = 50 # [100, 100] -> 20, [60]~[100] -> 50
 action2rotation = [0, 20, -20]
 
