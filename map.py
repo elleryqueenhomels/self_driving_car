@@ -13,8 +13,8 @@ from kivy.uix.button import Button
 from kivy.graphics import Color, Ellipse, Line
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 
-from ai import DQN # AI using PyTorch
-# from ai_theano import DQN # AI using theano
+# from ai import DQN # AI using PyTorch
+from ai_theano import DQN # AI using theano
 # from ai_tf import DQN # AI using TensorFlow
 # from ai_tf_alt import DQN # AI using TensorFlow contrib.layers (more efficient)
 
@@ -30,7 +30,8 @@ length = 0 # the length of the last drawing
 n_points = 0 # the total number of points in the last drawing
 
 # Get our AI, which we call 'brain', and that contains our Neural Network that represent our Q-function
-brain = DQN(input_sz=5, output_sz=3, hidden_layer_sizes=[60], gamma=0.9) # 5 inputs (dimensionality), 3 outputs (actions), gamma = 0.9
+brain = DQN(input_sz=5, output_sz=3, hidden_layer_sizes=[100, 100], gamma=0.9) # 5 inputs (dimensionality), 3 outputs (actions), gamma = 0.9
+temperature = 50 # [100, 100] -> 20, [60]~[100] -> 50
 action2rotation = [0, 20, -20]
 
 scores = [] # sliding window of rewards with respect to time
@@ -167,7 +168,7 @@ class Game(Widget):
 			diff = np.array([dx, dy])
 			last_distance = np.sqrt(diff.dot(diff))
 
-		last_action = brain.select_action(last_signal, temperature=50)
+		last_action = brain.select_action(last_signal, temperature=temperature)
 		rotation = action2rotation[last_action] # convert the action played (0, 1 or 2) into the rotation angle (0, 20 or -20)
 		self.car.move(rotation) # move the car according to this rotation angle
 
