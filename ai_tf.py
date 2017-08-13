@@ -13,7 +13,7 @@ CHECKPOINT_PATH = 'last_brain.npz'
 class HiddenLayer(object):
 
 	def __init__(self, Mi, Mo, activation=tf.nn.relu, use_bias=True):
-		self.W = tf.Variable(tf.random_normal(shape=(Mi, Mo)))
+		self.W = tf.Variable(tf.truncated_normal(shape=(Mi, Mo)))
 		self.use_bias = use_bias
 		self.params = [self.W]
 		if use_bias:
