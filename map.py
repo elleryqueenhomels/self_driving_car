@@ -229,7 +229,7 @@ class MyPaintWidget(Widget):
 
 	def on_touch_down(self, touch):
 		# put some sand when we do a left click
-		global length, n_points, last_x, last_y
+		global sand, length, n_points, last_x, last_y
 		with self.canvas:
 			Color(0.8, 0.7, 0)
 			touch.ud['line'] = Line(points=(touch.x, touch.y), width=10)
@@ -243,7 +243,7 @@ class MyPaintWidget(Widget):
 
 	def on_touch_move(self, touch):
 		# put some sand when we move the mouse while pressing left
-		global length, n_points, last_x, last_y
+		global sand, length, n_points, last_x, last_y
 		if touch.button == 'left':
 			touch.ud['line'].points += [touch.x, touch.y]
 			x, y = int(touch.x), int(touch.y)
