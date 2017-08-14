@@ -1,4 +1,4 @@
-# Self Driving Car - Environment (Map)
+# Self Driving Car - Environment (Map & Car)
 
 import time
 import numpy as np
@@ -237,8 +237,8 @@ class MyPaintWidget(Widget):
 			last_y = int(touch.y)
 			n_points = 0
 			length = 0
-			x = np.clip(touch.x, 0, longueur - 1)
-			y = np.clip(touch.y, 0, largeur - 1)
+			x = min(max(0, touch.x), longueur - 1)
+			y = min(max(0, touch.y), largeur - 1)
 			sand[int(x), int(y)] = 1
 
 	def on_touch_move(self, touch):
@@ -251,10 +251,10 @@ class MyPaintWidget(Widget):
 			n_points += 1
 			density = n_points / length
 			touch.ud['line'].width = int(20 * density + 1)
-			row1 = int(np.clip(x - 10, 0, longueur - 2))
-			row2 = int(np.clip(x + 10, 1, longueur - 1))
-			col1 = int(np.clip(y - 10, 0, largeur - 2))
-			col2 = int(np.clip(y + 10, 1, largeur - 1))
+			row1 = int(min(max(0, x - 10), longueur - 2))
+			row2 = int(min(max(1, x + 10), longueur - 1))
+			col1 = int(min(max(0, y - 10), largeur - 2))
+			col2 = int(min(max(1, y + 10), largeur - 1))
 			sand[row1 : row2, col1 : col2] = 1
 			last_x = x
 			last_y = y
