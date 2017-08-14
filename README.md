@@ -2,16 +2,16 @@
 
 A simple Self-Driving Car
 
-- Highly recommend to use IDE (My choice: Spyder 3.1.4)
-- By the way, Anaconda already contains Spyder.
+- Highly recommend to use IDE (My choice: <b>Spyder</b> 3.1.4)
+- By the way, <b>Anaconda</b> already contains Spyder.
 
-## Requirements
-- Python 2.7.13
-- NumPy 1.13.1
-- Kivy 1.10.0
-- (Optional) PyTorch 0.2.0_1
-- (Optional) Theano 0.9.0
-- (Optional) TensorFlow 1.0.0 or 1.1.* or 1.2.*
+## Environment
+- <b>Python</b> 2.7.13
+- <b>NumPy</b> 1.13.1
+- <b>Kivy</b> 1.10.0
+- (Optional) <b>PyTorch</b> 0.2.0_1
+- (Optional) <b>Theano</b> 0.9.0
+- (Optional) <b>TensorFlow</b> 1.0.0 or 1.1.* or 1.2.*
 
 <b>NOTE</b>: Among PyTorch, Theano and TensorFlow, we only need to choose one of them.
 
