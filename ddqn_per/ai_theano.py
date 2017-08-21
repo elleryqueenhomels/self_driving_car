@@ -38,7 +38,7 @@ class HiddenLayer:
 # Create the Deep Q-Network
 class DQN:
 
-	def __init__(self, input_sz, output_sz, hidden_layer_sizes, gamma, memory_capacity=100000, alpah=0.6, beta=0.4, batch_sz=50, learning_rate=5e-4, decay=0.999, momentum=0, eps=1e-10):
+	def __init__(self, input_sz, output_sz, hidden_layer_sizes, gamma, memory_capacity=100000, alpha=0.6, beta=0.4, batch_sz=100, learning_rate=5e-4, decay=0.999, momentum=0, eps=1e-10):
 		lr = np.float32(learning_rate)
 		mu = np.float32(momentum)
 		decay = np.float32(decay)
@@ -46,12 +46,12 @@ class DQN:
 		one = np.float32(1)
 
 		self.gamma = gamma
-		self.beta = beta # beta is used for Importance-Sampling Weights (IS weights), we will anneal beta to 1 while training
-		self.beta_count = 0 # used to anneal beta
 		self.batch_sz = batch_sz
 		self.reward_window = []
-		self.memory = PrioritizedReplayMemory(memory_capacity, alpah) # alpha determines how much prioritization is used
+		self.memory = PrioritizedReplayMemory(memory_capacity, alpha) # alpha determines how much prioritization is used
 		self.step_count = 0
+		self.beta = beta # beta is used for Importance-Sampling Weights (IS weights), we will anneal beta to 1 while training
+		self.beta_count = 0 # used to anneal beta
 
 		# create the graph
 		layers = []
@@ -74,7 +74,6 @@ class DQN:
 		states = T.fmatrix('states')
 		actions = T.ivector('actions')
 		targets = T.fvector('targets')
-		IS_weights = T.fvector('IS_weights') # Importance-Sampling weights, worked with PER
 
 		# outputs and cost
 		Z = states
@@ -83,7 +82,11 @@ class DQN:
 		Q_values = Z
 
 		selected_action_values = Q_values[T.arange(actions.shape[0]), actions]
-		cost = T.sum(IS_weights * (targets - selected_action_values)**2) # may use T.sum() or T.mean()
+		if beta is None:
+			cost = T.sum((targets - selected_action_values)**2) # may use T.sum() or T.mean()
+		else:
+			IS_weights = T.fvector('IS_weights') # Importance-Sampling weights, worked with PER
+			cost = T.sum(IS_weights * (targets - selected_action_values)**2) # may use T.sum() or T.mean()
 
 		# for sample action
 		temperature = T.fscalar('temperature')
@@ -118,11 +121,18 @@ class DQN:
 			allow_input_downcast=True
 		)
 
-		self.train_op = theano.function(
-			inputs=[states, actions, targets, IS_weights],
-			updates=updates,
-			allow_input_downcast=True
-		)
+		if beta is None:
+			self.train_op = theano.function(
+				inputs=[states, actions, targets],
+				updates=updates,
+				allow_input_downcast=True
+			)
+		else:
+			self.train_op = theano.function(
+				inputs=[states, actions, targets, IS_weights],
+				updates=updates,
+				allow_input_downcast=True
+			)
 
 	def predict(self, states):
 		states = np.atleast_2d(states)
@@ -156,16 +166,21 @@ class DQN:
 		predictions = self.predict(batch_states)[np.arange(batch_actions.shape[0]), batch_actions]
 		td_errors = np.abs(targets - predictions)
 
-		# calculate Importance-Sampling Weights: W = (N * P)**(-beta) / max(W), P means priority
-		beta = self.get_beta()
-		self.beta_count += 1
-		priorities = np.array(priorities) / self.memory.total_sum()
-		# N = self.memory.current_length()
-		# IS_weights = (N * priorities) ** (-beta)
-		IS_weights = priorities ** (-beta) # NOTE: N ** (-beta) will be divided out because of normalization
-		IS_weights /= np.max(IS_weights) # normalize
+		if self.beta is None:
+			self.train_op(batch_states, batch_actions, targets)
+		else:
+			# calculate Importance-Sampling Weights: W = (N * P)**(-beta) / max(W), P means priority
+			beta = self.get_beta()
+			self.beta_count += 1
 
-		self.train_op(batch_states, batch_actions, targets, IS_weights)
+			priorities = np.array(priorities) / self.memory.total_sum()
+
+			# N = self.memory.current_length()
+			# IS_weights = (N * priorities) ** (-beta)
+			IS_weights = priorities ** (-beta) # NOTE: N ** (-beta) will be divided out because of normalization
+			IS_weights /= np.max(IS_weights) # normalize
+
+			self.train_op(batch_states, batch_actions, targets, IS_weights)
 
 		return td_errors
 
