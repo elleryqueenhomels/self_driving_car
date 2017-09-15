@@ -13,10 +13,11 @@ Here is another interesting paper which demonstrates end-to-end learning for sel
 - <b>Python</b> 2.7.13
 - <b>NumPy</b> 1.13.1
 - <b>Kivy</b> 1.10.0 (For GUI)
-- (Optional) <b>PyTorch</b> 0.2.0_1
+- (Optional) <b>Keras</b> 2.0.8
 - (Optional) <b>Theano</b> 0.9.0
-- (Optional) <b>TensorFlow</b> 1.0.0 or 1.1.* or 1.2.*
+- (Optional) <b>PyTorch</b> 0.2.0_1
+- (Optional) <b>TensorFlow</b> 1.0.* or 1.1.* or 1.2.* or 1.3.*
 
-<b>NOTE</b>: Among PyTorch, Theano and TensorFlow, we only need to choose one of them.
+<b>NOTE</b>: Among Keras, Theano, PyTorch and TensorFlow, we only need to choose one of them, but in the directory 'ddqn_per' we only use Keras.
 
 ## ********************* still underdevelopment *********************
