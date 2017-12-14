@@ -1,6 +1,6 @@
 # Self-Driving Car
 
-A simple Self-Driving Car
+This is a simple self-driving car in a virtual simulation environment. The car collects information from environment through 3 sensors, plus the navigation information, then all these info will be organized as states to feed the car’s brain/AI which is implemented by a Double DQN with Prioritized Experience Replay. Then the car will intelligently tune its speed and steeling angle to avoid obstacles and find a short path to the destination.
 
 - Highly recommend to use IDE (My choice: <b>Spyder</b> 3.1.4)
 - By the way, <b>Anaconda</b> already contains Spyder.
